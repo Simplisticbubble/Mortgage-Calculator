@@ -1,0 +1,87 @@
+<div class="calculator-container">
+  <h2>Loan Calculator</h2>
+
+  <form [formGroup]="borrowForm">
+    <div class="form-group">
+      <label for="rate">Interest Rate (%)</label>
+      <input
+        type="number"
+        id="rate"
+        formControlName="rate"
+        step="0.1"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('rate')?.invalid && borrowForm.get('rate')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a rate between 0.1% and 30%
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="years">Loan Term (years)</label>
+      <input
+        type="number"
+        id="years"
+        formControlName="years"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('years')?.invalid && borrowForm.get('years')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a term between 1 and 50 years
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="yIncome">Annual Income ($)</label>
+      <input
+        type="number"
+        id="yIncome"
+        formControlName="yIncome"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('yIncome')?.invalid &&
+          borrowForm.get('yIncome')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a positive amount
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="mExpense">Monthly Expenses ($)</label>
+      <input
+        type="number"
+        id="mExpense"
+        formControlName="mExpense"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('mExpense')?.invalid &&
+          borrowForm.get('mExpense')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a positive amount
+      </div>
+    </div>
+  </form>
+
+  <div class="result-section">
+    <h3>Maximum Borrow Amount</h3>
+    <p class="result-amount">
+      {{ borrowAmount | currency : "USD" : "symbol" : "1.2-2" }}
+    </p>
+  </div>
+</div>

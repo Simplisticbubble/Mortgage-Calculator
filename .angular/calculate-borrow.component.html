@@ -1,0 +1,20 @@
+<div class="counter-container">
+  <!-- Displaying state -->
+  <h2>Counter: {{ count }}</h2>
+  <p>Status: {{ isActive ? "Active" : "Inactive" }}</p>
+
+  <!-- Buttons that modify state -->
+  <button (click)="increment()">Increment</button>
+  <button (click)="toggleActive()">
+    {{ isActive ? "Deactivate" : "Activate" }}
+  </button>
+  <button (click)="changeText()">{{ buttonText }}</button>
+
+  <!-- Conditional display based on state -->
+  <div *ngIf="count > 5" class="message">You've clicked more than 5 times!</div>
+
+  <!-- Style binding based on state -->
+  <div [class.active]="isActive" [class.inactive]="!isActive">
+    This div changes class based on state
+  </div>
+</div>
