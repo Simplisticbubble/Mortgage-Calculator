@@ -1,0 +1,113 @@
+<div class="calculator-container">
+  <h2>Repayment Calculator</h2>
+
+  <form [formGroup]="borrowForm">
+    <div class="form-group">
+      <label for="rate">Interest Rate (%)</label>
+      <input
+        type="number"
+        id="rate"
+        formControlName="rate"
+        step="0.1"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('rate')?.invalid && borrowForm.get('rate')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a rate between 0.1% and 30%
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="years">Loan Term (years)</label>
+      <input
+        type="number"
+        id="years"
+        formControlName="years"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('years')?.invalid && borrowForm.get('years')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a term between 1 and 50 years
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="borrowAmount">Borrow Amount ($)</label>
+      <input
+        type="number"
+        id="borrowAmount"
+        formControlName="borrowAmount"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          borrowForm.get('borrowAmount')?.invalid &&
+          borrowForm.get('borrowAmount')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a positive amount
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Repayment Frequency</label>
+      <div class="frequency-options">
+        <button
+          type="button"
+          class="frequency-btn"
+          [class.active]="repaymentFrequency === 'weekly'"
+          (click)="setFrequency('weekly')"
+        >
+          Weekly
+        </button>
+        <button
+          type="button"
+          class="frequency-btn"
+          [class.active]="repaymentFrequency === 'fortnightly'"
+          (click)="setFrequency('fortnightly')"
+        >
+          Fortnightly
+        </button>
+        <button
+          type="button"
+          class="frequency-btn"
+          [class.active]="repaymentFrequency === 'monthly'"
+          (click)="setFrequency('monthly')"
+        >
+          Monthly
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="result-section">
+    <h3>
+      {{
+        repaymentFrequency === "weekly"
+          ? "Weekly"
+          : repaymentFrequency === "fortnightly"
+          ? "Fortnightly"
+          : "Monthly"
+      }}
+      Repayments
+    </h3>
+    <p class="result-amount">
+      {{
+        repaymentFrequency === "weekly"
+          ? (monthlyRepayments / 4 | currency : "USD" : "symbol" : "1.2-2")
+          : repaymentFrequency === "fortnightly"
+          ? (monthlyRepayments / 2 | currency : "USD" : "symbol" : "1.2-2")
+          : (monthlyRepayments | currency : "USD" : "symbol" : "1.2-2")
+      }}
+    </p>
+  </div>
+</div>

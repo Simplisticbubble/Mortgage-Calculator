@@ -1,0 +1,158 @@
+<div class="loan-calculator-container">
+  <h2>Loan Payoff Calculator</h2>
+
+  <form [formGroup]="loanForm" class="calculator-form">
+    <div class="form-group">
+      <label for="loanAmount">Loan Amount ($)</label>
+      <input
+        type="number"
+        id="loanAmount"
+        formControlName="loanAmount"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          loanForm.get('loanAmount')?.invalid &&
+          loanForm.get('loanAmount')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a valid loan amount (minimum $1,000)
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="interestRate">Interest Rate (%)</label>
+      <input
+        type="number"
+        id="interestRate"
+        formControlName="interestRate"
+        step="0.01"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          loanForm.get('interestRate')?.invalid &&
+          loanForm.get('interestRate')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a rate between 0.1% and 20%
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="loanTerm">Loan Term (years)</label>
+      <input
+        type="number"
+        id="loanTerm"
+        formControlName="loanTerm"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          loanForm.get('loanTerm')?.invalid && loanForm.get('loanTerm')?.touched
+        "
+        class="error-message"
+      >
+        Please enter a term between 1 and 30 years
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="monthlyPayment">Monthly Payment ($)</label>
+      <input
+        type="number"
+        id="monthlyPayment"
+        formControlName="monthlyPayment"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          loanForm.get('monthlyPayment')?.invalid &&
+          loanForm.get('monthlyPayment')?.touched
+        "
+        class="error-message"
+      >
+        Minimum payment: {{ minPayment | currency }}
+      </div>
+    </div>
+
+    <button type="button" (click)="calculateLoan()" class="calculate-btn">
+      Calculate
+    </button>
+  </form>
+
+  <div class="results-section" *ngIf="showResults">
+    <div class="summary">
+      <div class="summary-item">
+        <span class="label">Total Interest</span>
+        <span class="value">{{ totalInterest | currency }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Total Cost</span>
+        <span class="value">{{ totalCost | currency }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Payoff Time</span>
+        <span class="value"
+          >{{ payoffYears }} years {{ payoffMonths }} months</span
+        >
+      </div>
+    </div>
+
+    <!-- <div class="chart-container">
+      <canvas id="loanChart">{{ chart }}</canvas>
+    </div> -->
+    <div class="chart">
+      <div class="bar" style="height: 20%">
+        <div class="value-label">20</div>
+        <div class="bar-label">Jan</div>
+      </div>
+      <div class="bar" style="height: 45%">
+        <div class="value-label">45</div>
+        <div class="bar-label">Feb</div>
+      </div>
+      <div class="bar" style="height: 70%">
+        <div class="value-label">70</div>
+        <div class="bar-label">Mar</div>
+      </div>
+      <div class="bar" style="height: 30%">
+        <div class="value-label">30</div>
+        <div class="bar-label">Apr</div>
+      </div>
+      <div class="bar" style="height: 90%">
+        <div class="value-label">90</div>
+        <div class="bar-label">May</div>
+      </div>
+    </div>
+    <div class="amortization-toggle">
+      <button (click)="toggleAmortization()" class="toggle-btn">
+        {{ showAmortization ? "Hide" : "Show" }} Amortization Schedule
+      </button>
+    </div>
+
+    <div class="amortization-schedule" *ngIf="showAmortization">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Payment</th>
+            <th>Principal</th>
+            <th>Interest</th>
+            <th>Remaining Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let payment of amortizationSchedule; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ payment.payment | currency }}</td>
+            <td>{{ payment.principal | currency }}</td>
+            <td>{{ payment.interest | currency }}</td>
+            <td>{{ payment.balance | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

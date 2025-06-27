@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SupabaseService } from '../supabase.service';
 
 @Component({
   selector: 'app-clients',
@@ -7,20 +6,7 @@ import { SupabaseService } from '../supabase.service';
   styleUrls: ['./clients.component.scss'],
 })
 export class ClientsComponent implements OnInit {
-  clients: any[] = [];
-  loading = false;
+  constructor() {}
 
-  constructor(private supabase: SupabaseService) {}
-
-  async ngOnInit() {
-    await this.fetchClients();
-  }
-
-  async fetchClients() {
-    this.loading = true;
-    const { data, error } = await this.supabase.getClients();
-    if (data) this.clients = data;
-    if (error) console.error('Error fetching clients:', error);
-    this.loading = false;
-  }
+  ngOnInit(): void {}
 }

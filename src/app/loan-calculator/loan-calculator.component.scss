@@ -1,0 +1,209 @@
+// Variables
+$primary-color: #3498db;
+$primary-hover: #2980b9;
+$text-color: #2c3e50;
+$light-text: #34495e;
+$error-color: #e74c3c;
+$background-light: #f8f9fa;
+$border-color: #ddd;
+$shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+// Main container
+.loan-calculator-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: $shadow;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  h2 {
+    color: $text-color;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .calculator-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: $light-text;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+        }
+      }
+
+      .error-message {
+        color: $error-color;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+      }
+    }
+
+    .calculate-btn {
+      grid-column: span 2;
+      padding: 0.75rem;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: $primary-hover;
+      }
+    }
+  }
+
+  .results-section {
+    margin-top: 2rem;
+    animation: fadeIn 0.5s ease-in-out;
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      &-item {
+        background-color: $background-light;
+        padding: 1.5rem;
+        border-radius: 6px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+        .label {
+          display: block;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+          color: $light-text;
+        }
+
+        .value {
+          font-size: 1.25rem;
+          color: $primary-color;
+        }
+      }
+    }
+
+    .chart-container {
+      height: 400px;
+      margin-bottom: 2rem;
+    }
+
+    .amortization-toggle {
+      text-align: center;
+      margin-bottom: 1.5rem;
+
+      .toggle-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: darken(#6c757d, 10%);
+        }
+      }
+    }
+
+    .amortization-schedule {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+          padding: 1rem;
+          text-align: left;
+          border-bottom: 1px solid $border-color;
+        }
+
+        th {
+          background-color: $background-light;
+          position: sticky;
+          top: 0;
+          font-weight: 600;
+        }
+
+        tr:hover {
+          background-color: lighten($background-light, 2%);
+        }
+      }
+    }
+  }
+}
+.chart {
+  display: flex;
+  align-items: flex-end;
+  height: 300px;
+  width: 500px;
+  border-left: 1px solid #333;
+  border-bottom: 1px solid #333;
+  margin: 20px;
+  padding: 10px 0;
+}
+
+.bar {
+  flex: 1;
+  background-color: #4caf50;
+  margin: 0 5px;
+  position: relative;
+  text-align: center;
+}
+
+.bar-label {
+  position: absolute;
+  bottom: -25px;
+  width: 100%;
+  text-align: center;
+}
+
+.value-label {
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  text-align: center;
+}
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

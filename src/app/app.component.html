@@ -3,7 +3,14 @@
 
 <div class="content" role="main">
   <!-- Your counter component -->
-  <app-calculate-borrow></app-calculate-borrow>
+  <nav>
+    <a href="/borrowCalculator">Borrow</a>
+    <a href="/repaymentCalculator">Repayment</a>
+    <a href="/loanCalculator">Loan Calculator</a>
+  </nav>
+
+  <!-- Router outlet will render routed components here -->
+  <router-outlet></router-outlet>
 
   <!-- You can keep other content if you want -->
   <div class="card-container"></div>

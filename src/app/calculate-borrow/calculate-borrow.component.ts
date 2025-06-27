@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CalculateBorrowComponent {
   borrowForm: FormGroup;
-  borrowAmount: number = 0;
+  borrowAmount: number = 1396408.27;
 
   constructor(private fb: FormBuilder) {
     this.borrowForm = this.fb.group({

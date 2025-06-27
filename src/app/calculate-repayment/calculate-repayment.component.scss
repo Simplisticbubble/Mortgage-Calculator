@@ -101,4 +101,23 @@
       padding-top: 1rem;
     }
   }
+  .frequency-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .frequency-btn {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .frequency-btn.active {
+    background: #007bff;
+    color: white;
+    background-color: #36e453;
+  }
 }

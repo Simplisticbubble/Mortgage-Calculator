@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CalculateBorrowComponent } from './calculate-borrow/calculate-borrow.component';
-import { ClientsComponent } from './clients/clients.component';
+import { CalculateRepaymentComponent } from './calculate-repayment/calculate-repayment.component';
+import { LoanCalculatorComponent } from './loan-calculator/loan-calculator.component';
 
 const routes: Routes = [
-  { path: 'calculate', component: CalculateBorrowComponent },
-  { path: 'clients', component: ClientsComponent },
-  { path: '', redirectTo: '/calculate', pathMatch: 'full' },
+  { path: 'borrowCalculator', component: CalculateBorrowComponent },
+  { path: 'repaymentCalculator', component: CalculateRepaymentComponent },
+  { path: 'loanCalculator', component: LoanCalculatorComponent },
+  { path: '', redirectTo: '/items', pathMatch: 'full' }, // Optional: Redirect to items by default
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
