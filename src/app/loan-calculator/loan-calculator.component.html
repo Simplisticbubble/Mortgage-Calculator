@@ -66,6 +66,8 @@
         id="monthlyPayment"
         formControlName="monthlyPayment"
         class="form-control"
+        [min]="minPayment"
+        (blur)="validatePayment()"
       />
       <div
         *ngIf="
@@ -105,25 +107,13 @@
       <canvas id="loanChart">{{ chart }}</canvas>
     </div> -->
     <div class="chart">
-      <div class="bar" style="height: 20%">
-        <div class="value-label">20</div>
-        <div class="bar-label">Jan</div>
-      </div>
-      <div class="bar" style="height: 45%">
-        <div class="value-label">45</div>
-        <div class="bar-label">Feb</div>
-      </div>
-      <div class="bar" style="height: 70%">
-        <div class="value-label">70</div>
-        <div class="bar-label">Mar</div>
-      </div>
-      <div class="bar" style="height: 30%">
-        <div class="value-label">30</div>
-        <div class="bar-label">Apr</div>
-      </div>
-      <div class="bar" style="height: 90%">
-        <div class="value-label">90</div>
-        <div class="bar-label">May</div>
+      <div
+        class="bar"
+        *ngFor="let payment of amortizationSchedule; let i = index"
+        title="${{ payment.balance.toFixed(2) }}"
+        [style.height.%]="getBarHeightPercent(payment.balance)"
+      >
+        <div class="bar-label">{{ months[i % 12] }}</div>
       </div>
     </div>
     <div class="amortization-toggle">

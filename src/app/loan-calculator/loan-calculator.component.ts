@@ -13,6 +13,20 @@ export class LoanCalculatorComponent implements OnInit {
   chart: any;
   showResults = false;
   showAmortization = false;
+  months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   // Calculation results
   totalInterest = 0;
@@ -40,19 +54,40 @@ export class LoanCalculatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.calculateMinPayment();
-    this.loanForm.valueChanges.subscribe(() => {
+
+    // Only update if monthlyPayment is empty or below minimum
+    this.loanForm.get('loanAmount')?.valueChanges.subscribe(() => {
+      this.calculateMinPayment();
+      if (
+        !this.loanForm.value.monthlyPayment ||
+        this.loanForm.value.monthlyPayment < this.minPayment
+      ) {
+        this.loanForm.patchValue(
+          { monthlyPayment: this.minPayment.toFixed(2) },
+          { emitEvent: false } // Prevent infinite loop
+        );
+      }
+    });
+
+    // Similar for other fields that affect min payment
+    this.loanForm.get('interestRate')?.valueChanges.subscribe(() => {
+      this.calculateMinPayment();
+    });
+
+    this.loanForm.get('loanTerm')?.valueChanges.subscribe(() => {
       this.calculateMinPayment();
     });
   }
 
-  calculateMinPayment(): void {
+  calculateMinPayment(): number {
     const formValues = this.loanForm.value;
     if (
       !formValues.loanAmount ||
       !formValues.interestRate ||
       !formValues.loanTerm
-    )
-      return;
+    ) {
+      return 0;
+    }
 
     const principal = formValues.loanAmount;
     const annualRate = formValues.interestRate / 100;
@@ -63,14 +98,17 @@ export class LoanCalculatorComponent implements OnInit {
       (principal * monthlyRate * Math.pow(1 + monthlyRate, payments)) /
       (Math.pow(1 + monthlyRate, payments) - 1);
 
-    if (
-      !formValues.monthlyPayment ||
-      formValues.monthlyPayment < this.minPayment
-    ) {
-      this.loanForm.patchValue({ monthlyPayment: this.minPayment.toFixed(2) });
+    return this.minPayment;
+  }
+  validatePayment(): void {
+    const paymentControl = this.loanForm.get('monthlyPayment');
+    if (!paymentControl) return;
+    if (paymentControl?.value < this.minPayment) {
+      paymentControl.setErrors({ min: true });
+    } else {
+      paymentControl?.setErrors(null);
     }
   }
-
   calculateLoan(): void {
     if (this.loanForm.invalid) return;
 
@@ -118,95 +156,13 @@ export class LoanCalculatorComponent implements OnInit {
     this.createChart();
   }
 
-  // createChart(): void {
-  //   if (this.chart) {
-  //     this.chart.destroy();
-  //   }
+  getBarHeightPercent(balance: number): number {
+    // Ensure we don't divide by zero
+    if (!balance || balance <= 0) return 0;
 
-  //   const labels = [];
-  //   const principalData = [];
-  //   const interestData = [];
-  //   const balanceData = [];
-
-  //   for (
-  //     let i = 0;
-  //     i < this.amortizationSchedule.length;
-  //     i += Math.ceil(this.amortizationSchedule.length / 12)
-  //   ) {
-  //     const payment = this.amortizationSchedule[i];
-  //     labels.push(`Year ${Math.ceil(payment.month / 12)}`);
-  //     principalData.push(payment.principal);
-  //     interestData.push(payment.interest);
-  //     balanceData.push(payment.balance);
-  //   }
-
-  //   const ctx = this.chartRef.nativeElement.getContext('2d');
-  //   this.chart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: labels,
-  //       datasets: [
-  //         {
-  //           label: 'Principal',
-  //           data: principalData,
-  //           backgroundColor: 'rgba(54, 162, 235, 0.7)',
-  //           borderColor: 'rgba(54, 162, 235, 1)',
-  //           borderWidth: 1,
-  //         },
-  //         {
-  //           label: 'Interest',
-  //           data: interestData,
-  //           backgroundColor: 'rgba(255, 99, 132, 0.7)',
-  //           borderColor: 'rgba(255, 99, 132, 1)',
-  //           borderWidth: 1,
-  //         },
-  //         {
-  //           label: 'Remaining Balance',
-  //           data: balanceData,
-  //           type: 'line',
-  //           borderColor: 'rgba(75, 192, 192, 1)',
-  //           borderWidth: 2,
-  //           fill: false,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       scales: {
-  //         x: {
-  //           stacked: true,
-  //         },
-  //         y: {
-  //           stacked: false,
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Amount ($)',
-  //           },
-  //         },
-  //       },
-  //       plugins: {
-  //         title: {
-  //           display: true,
-  //           text: 'Loan Payoff Progress',
-  //         },
-  //         tooltip: {
-  //           callbacks: {
-  //             afterBody: (context) => {
-  //               const index =
-  //                 context[0].dataIndex *
-  //                 Math.ceil(this.amortizationSchedule.length / 12);
-  //               const payment = this.amortizationSchedule[index];
-  //               return `Month: ${
-  //                 payment.month
-  //               }\nRemaining: $${payment.balance.toFixed(2)}`;
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
+    // Calculate percentage relative to initial loan amount
+    return (balance / this.loanForm.value.loanAmount) * 100;
+  }
   createChart(): void {
     if (this.chart) {
       this.chart.destroy();
